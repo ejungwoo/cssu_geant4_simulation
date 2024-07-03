@@ -1,3 +1,3 @@
-/run/setCutForAGivenParticle e- 100. mm
-#/run/beamOn 852
-/run/beamOn 128
+/run/setCutForAGivenParticle e- 10. mm
+#/run/beamOn 8520
+/run/beamOn 1280
