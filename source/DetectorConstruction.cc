@@ -32,11 +32,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     // -------------------------------------------------------------------------------------
     // Detector
-    G4Material* detector_mat;
     G4double pressure = 26664.5*hep_pascal; // 200 Torr
     G4double temperature = 293.15*kelvin; //
-    G4double density = 0.947*mg/cm3
-    detector_mat = new G4Material("CF4", density,2,kStateGas,temperature,pressure);
+    G4double density = 0.947*mg/cm3;
+    G4Material* detector_mat = new G4Material("CF4", density,2,kStateGas,temperature,pressure);
     G4Element* element_C = nist -> FindOrBuildElement("C");
     G4Element* element_F = nist -> FindOrBuildElement("F");
     detector_mat -> AddElement(element_C,1);

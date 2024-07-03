@@ -21,13 +21,12 @@ int main(int argc, char** argv)
     runManager -> SetUserInitialization(physicsList);
 
     G4String particleName = "alpha";
-    G4String particleEnergy = 5.486; // MeV (85.2 %)
-    G4String particleEnergy = 5.443; // MeV (12.8 %)
+    //G4double particleEnergy = 5.486; // MeV (241Am 85.2 %)
+    G4double particleEnergy = 5.443; // MeV (241Am 12.8 %)
     G4double px = 0;
     G4double py = 0;
     G4double pz = 1;
-    G4String materialName = "CF4";
-    G4String outputFileName = "data_cf4_alpha.txt";
+    G4String outputFileName = "data/sim_alpha2.txt";
 
     PrimaryGeneratorAction* pga = new PrimaryGeneratorAction(particleName,particleEnergy,px,py,pz);
     DetectorConstruction* det = new DetectorConstruction();

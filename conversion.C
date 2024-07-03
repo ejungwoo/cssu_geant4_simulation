@@ -1,4 +1,4 @@
-void conversion(TString inputFileName = "data_cf4_alpha.txt")
+void conversion(TString inputFileName = "data/sim_alpha2.txt")
 {
     TString outputFileName = inputFileName;
     outputFileName.ReplaceAll(".txt",".root");

@@ -1,6 +1,6 @@
-void analysis()
+void analysis(TString inputFileName = "data/sim_alpha1.root")
 {
-    auto file = new TFile("data_cf4_alpha.root","read");
+    auto file = new TFile(inputFileName,"read");
     auto tree = (TTree*) file -> Get("energy");
 
     int eventID, volumeID;
