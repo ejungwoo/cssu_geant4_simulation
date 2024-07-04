@@ -1,5 +1,6 @@
 build/
 data/
+figures/
 g4run
 *txt
 *root

@@ -24,9 +24,22 @@ void conversion(TString input = "data/sim_alpha1.txt")
     treeEnergySum -> Branch("energySum",&energySum);
     treeEnergySum -> Branch("energyFull",&energyFull);
 
+    int lastEventID = 0;
     ifstream dataFile(input);
     while (dataFile >> eventID >> volumeID >> x >> y >> z >> energy) {
         treePoint -> Fill();
+        if (gRandom->Rndm()<=electronEfficiency) {
+            if (z>z1 && z<z2) {
+                energySum += energy;
+            }
+            energyFull += energy;
+        }
+        if (eventID!=lastEventID) {
+            treeEnergySum -> Fill();
+            energySum = 0.;
+            energyFull = 0.;
+            lastEventID = eventID;
+        }
     }
     cout << treePoint -> GetEntries() << endl;
 

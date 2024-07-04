@@ -11,7 +11,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "SteppingAction.hh"
 #include "G4StepLimiterPhysics.hh"
-#include "G4Random.h"
+#include "Randomize.hh"
 
 int main(int argc, char** argv)
 {
@@ -23,16 +23,25 @@ int main(int argc, char** argv)
     physicsList -> RegisterPhysics(new G4StepLimiterPhysics());
     runManager -> SetUserInitialization(physicsList);
 
+    G4String macroName;
+    if (argc>1)
+        macroName = G4String("/control/execute ")+argv[1];
+
+    ////////////////////////////////////////////////////////////////
+    G4double stepLimit = 10; // mm
+    G4double pressure = 200; // torr
     G4String particleName = "alpha";
-    G4double particleEnergy = 5.486; // MeV (241Am 85.2 %)
-    //G4double particleEnergy = 5.443; // MeV (241Am 12.8 %)
     G4double px = 0;
     G4double py = 0;
     G4double pz = 1;
-    G4String outputFileName = "data/sim_alpha1.txt";
+    //G4double particleEnergy = 5.486; // MeV (241Am 85.2 %)
+    //G4String outputFileName = "data/sim_alpha1.txt";
+    G4double particleEnergy = 5.443; // MeV (241Am 12.8 %)
+    G4String outputFileName = "data/sim_alpha2.txt";
+    ////////////////////////////////////////////////////////////////
 
     PrimaryGeneratorAction* pga = new PrimaryGeneratorAction(particleName,particleEnergy,px,py,pz);
-    DetectorConstruction* det = new DetectorConstruction();
+    DetectorConstruction* det = new DetectorConstruction(stepLimit);
     SteppingAction* step = new SteppingAction(outputFileName);
 
     runManager -> SetUserInitialization(det);
@@ -45,7 +54,7 @@ int main(int argc, char** argv)
 
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     if (argc>1) {
-        UImanager -> ApplyCommand(G4String("/control/execute ")+argv[1]);
+        UImanager -> ApplyCommand(macroName);
     }
     else {
         G4UIExecutive* ui = new G4UIExecutive(argc, argv);

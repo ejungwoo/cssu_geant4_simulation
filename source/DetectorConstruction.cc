@@ -8,9 +8,11 @@
 #include "G4UserLimits.hh"
 #include <iostream>
 
-DetectorConstruction::DetectorConstruction()
+DetectorConstruction::DetectorConstruction(G4double stepLimit, G4double pressureTorr)
     : G4VUserDetectorConstruction()
 {
+    fStepLimit = stepLimit;
+    fPressureTorr = pressureTorr;
 }
 
 DetectorConstruction::~DetectorConstruction()
@@ -34,6 +36,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     // Detector
     G4double pressure = 26664.5*hep_pascal; // 200 Torr
     G4double density = 0.947*mg/cm3; // 200 Torr
+    pressure = pressure * fPressureTorr / 200.;
+    density = density * fPressureTorr / 200.;
     G4double temperature = 293.15*kelvin;
     G4Material* detector_mat = new G4Material("CF4", density,2,kStateGas,temperature,pressure);
     G4Element* element_C = nist -> FindOrBuildElement("C");
@@ -47,7 +51,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     G4double detector_offset_z = 0.5*wz;
     G4Box* solidDetector = new G4Box("Detector", 0.5*wx, 0.5*wy, 0.5*wz);
     G4LogicalVolume* logicDetector = new G4LogicalVolume(solidDetector, detector_mat, "Detector");
-    logicDetector -> SetUserLimits(new G4UserLimits(10*mm));
+    logicDetector -> SetUserLimits(new G4UserLimits(fStepLimit*mm));
     new G4PVPlacement(0, G4ThreeVector(0,0,detector_offset_z), logicDetector, "Detector", logicWorld, false, 1, true);
 
     return physWorld;

@@ -10,10 +10,13 @@ class G4LogicalVolume;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
     public:
-        DetectorConstruction();
+        DetectorConstruction(G4double stepLimit=10, G4double pressureTorr=200.);
         virtual ~DetectorConstruction();
 
         virtual G4VPhysicalVolume* Construct();
+
+        G4double fStepLimit;
+        G4double fPressureTorr;
 };
 
 #endif

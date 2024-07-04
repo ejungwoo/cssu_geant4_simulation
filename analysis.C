@@ -1,35 +1,21 @@
-void analysis(TString inputFileName = "data/sim_alpha1.root")
+void analysis(TString input = "data/sim_alpha1.root")
 {
-    auto file = new TFile(inputFileName,"read");
-    auto tree = (TTree*) file -> Get("energy");
+    auto file = new TFile(input,"read");
+    auto tree = (TTree*) file -> Get("energySum");
 
-    int eventID, volumeID;
-    double x, y, z, energy;
-    tree -> SetBranchAddress("eventID",&eventID);
-    tree -> SetBranchAddress("volumeID",&volumeID);
-    tree -> SetBranchAddress("x",&x);
-    tree -> SetBranchAddress("y",&y);
-    tree -> SetBranchAddress("z",&z);
-    tree -> SetBranchAddress("energy",&energy);
+    auto histEnergySum = new TH1D("histEnergySum","energy sum",200,0,6);
+    tree -> Project("histEnergySum","energySum");
 
-    auto hist_z_energy_1d = new TH1D("hist_z_energy_1d",";z;energy sum", 200,0,200);
-    auto hist_z_energy_2d = new TH2D("hist_z_energy_2d",";z;energy", 200,0,200, 200,0,0.05);
-    auto numEntries = tree -> GetEntries();
-    for (auto iEntry=0; iEntry<numEntries; ++iEntry)
-    {
-        tree -> GetEntry(iEntry);
-        //////////////////////////////////////////////////////////////////////
+    auto histEnergyFull = new TH1D("histEnergyFull","energy sum",200,1,7);
+    tree -> Project("histEnergyFull","energyFull");
 
-        hist_z_energy_2d -> Fill(z,energy);
+    auto cvs = new TCanvas("cvs1","",1300,600);
+    cvs -> Divide(2,1);
+    cvs -> cd(1);
+    histEnergySum -> Draw();
+    auto fit = new TF1("fit","gaus(0)",0,6);
+    histEnergySum -> Fit(fit);
 
-        //double energySum = 0;
-        //hist_z_energy_1d -> Fill(z,energySum);
-
-        //////////////////////////////////////////////////////////////////////
-    }
-    new TCanvas("cvs1","",1200,800);
-    hist_z_energy_1d -> Draw("colz");
-
-    new TCanvas("cvs2","",1200,800);
-    hist_z_energy_2d -> Draw("colz");
+    cvs -> cd(2);
+    histEnergyFull -> Draw();
 }
